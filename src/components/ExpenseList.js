@@ -7,7 +7,6 @@ export const ExpenseList = ({ expenses }) => {
     <>
       <ul className="list">
         {expenses.map((expense) => {
-          console.log("expense list", expense.charge);
           return <Item key={expense.id} expense={expense} />;
         })}
       </ul>
