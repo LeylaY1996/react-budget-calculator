@@ -23,7 +23,7 @@ function App() {
   const [amount, setAmount] = useState("");
 
   // Alert
-  const [alert, setAlert] = userState({ show: false });
+  const [alert, setAlert] = useState({ show: false })
   // functionality
   const handleCharge = (e) => {
     console.log(`charge: ${e.target.value}`);
