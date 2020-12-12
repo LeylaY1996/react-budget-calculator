@@ -36,6 +36,14 @@ function App() {
     setAmount(e.target.value);
   };
 
+  const handleAlert = ({type,text}) => {
+    console.log("ELert",type,text)
+    setAlert({show:true,type,text});
+    setTimeout(()=>{
+      setAlert({show:false});
+    },10000);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (charge !== "" && amount > 0) {
@@ -43,17 +51,21 @@ function App() {
 
       // expenses üstüne set et demek
       setExpenses([...expenses, singleExpense]);
+
+      handleAlert({type:"success",text:"item added"})
       setCharge(" ");
       setAmount(" ");
     } else {
       // handle alert called
+      handleAlert({type:"danger",text:"item not added"})
+
     }
   };
 
   return (
     <>
       {alert.show && <Alert type={alert.type} text={alert.text} />}
-      <Alert />
+      <Alert handleAlert={handleAlert}/>
       <h1>Budget Calculator</h1>
       <main className="App">
         <ExpenseForm
