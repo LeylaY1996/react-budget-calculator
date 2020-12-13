@@ -5,12 +5,14 @@ import Alert from "./components/Alert";
 import { v4 as uuid } from "uuid";
 import React, { useState } from "react";
 
-const initialExpenses = [
+/* const initialExpenses = [
   { id: uuid(), charge: "rent", amount: 1620 },
   { id: uuid(), charge: "car payment", amount: 400 },
   { id: uuid(), charge: "credit card bill", amount: 1200 },
-];
+]; */
 
+
+const initialExpenses = localStorage.getItem('expenses')
 function App() {
   // ************* state values *************
   // *all expenses, add expense*
@@ -21,6 +23,12 @@ function App() {
 
   // single amount
   const [amount, setAmount] = useState("");
+
+  // edit 
+  const [edit, setEdit] = useState(true);
+
+  // edit item
+  const [id, setId] = useState(0);
 
   // Alert
   const [alert, setAlert] = useState({ show: false })
@@ -47,12 +55,23 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (charge !== "" && amount > 0) {
-      const singleExpense = { id: uuid(), charge, amount };
+      if(edit){
+        let tempExpenses =  expenses.map(item=>{
+           return item.id === id?{...item,charge,amount}:item
+        });
+        setExpenses(tempExpenses);
+        setEdit(false)
+        handleAlert({type:"success",text:"item edited"})
 
-      // expenses üstüne set et demek
-      setExpenses([...expenses, singleExpense]);
 
-      handleAlert({type:"success",text:"item added"})
+      }else {
+        const singleExpense = { id: uuid(), charge, amount };
+  
+        // expenses üstüne set et demek
+        setExpenses([...expenses, singleExpense]);
+  
+        handleAlert({type:"success",text:"item added"})
+      }
       setCharge(" ");
       setAmount(" ");
     } else {
@@ -81,7 +100,12 @@ function App() {
 
   // Handle edit
   const handleEdit = (id) => {
-    console.log(`item edited: ${id}`)
+    let expense = expenses.find(item => item.id === id);
+    let {charge,amount} = expense;
+    setCharge(charge)
+    setAmount(amount)
+    setEdit(true)
+    setId(id)
   }
 
   return (
@@ -96,6 +120,7 @@ function App() {
           handleAmount={handleAmount}
           handleCharge={handleCharge}
           handleSubmit={handleSubmit}
+          edit={edit}
         />
         <ExpenseList 
           expenses={expenses} 
