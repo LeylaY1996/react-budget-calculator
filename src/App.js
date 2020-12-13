@@ -3,7 +3,7 @@ import ExpenseList from "./components/ExpenseList";
 import ExpenseForm from "./components/ExpenseForm";
 import Alert from "./components/Alert";
 import { v4 as uuid } from "uuid";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 
 /* const initialExpenses = [
   { id: uuid(), charge: "rent", amount: 1620 },
@@ -12,7 +12,10 @@ import React, { useState } from "react";
 ]; */
 
 
-const initialExpenses = localStorage.getItem('expenses')
+const initialExpenses = localStorage.getItem('expenses') 
+        ? JSON.parse(localStorage.getItem('expenses')) 
+        : []; 
+
 function App() {
   // ************* state values *************
   // *all expenses, add expense*
@@ -25,7 +28,7 @@ function App() {
   const [amount, setAmount] = useState("");
 
   // edit 
-  const [edit, setEdit] = useState(true);
+  const [edit, setEdit] = useState(false);
 
   // edit item
   const [id, setId] = useState(0);
@@ -33,6 +36,12 @@ function App() {
   // Alert
   const [alert, setAlert] = useState({ show: false })
   // functionality
+
+
+  useEffect(()=>{
+    console.log("we called useEffect")
+    localStorage.setItem('expenses',JSON.stringify(expenses));
+  },[])
   const handleCharge = (e) => {
     console.log(`charge: ${e.target.value}`);
     setCharge(e.target.value);
