@@ -6,9 +6,9 @@ import { v4 as uuid } from "uuid";
 import React, { useState } from "react";
 
 const initialExpenses = [
-  /* { id: uuid(), charge: "rent", amount: 1620 },
+  { id: uuid(), charge: "rent", amount: 1620 },
   { id: uuid(), charge: "car payment", amount: 400 },
-  { id: uuid(), charge: "credit card bill", amount: 1200 }, */
+  { id: uuid(), charge: "credit card bill", amount: 1200 },
 ];
 
 function App() {
@@ -62,10 +62,32 @@ function App() {
     }
   };
 
+  /* Clear items */
+  const clearItems = () => {
+    console.log("cleared all items")
+    setExpenses([]);
+    handleAlert({type: "danger",text: "All item deleted"})
+
+  }
+
+  // Handle delete
+  const handleDelete = (id) => {
+    console.log(`item deleted: ${id}`)
+    let tempExpenses = expenses.filter(item => item.id !== id);
+    console.log(tempExpenses);
+    setExpenses(tempExpenses)
+    handleAlert({type: "danger",text: "Item deleted"})
+  }
+
+  // Handle edit
+  const handleEdit = (id) => {
+    console.log(`item edited: ${id}`)
+  }
+
   return (
     <>
       {alert.show && <Alert type={alert.type} text={alert.text} />}
-      <Alert handleAlert={handleAlert}/>
+      <Alert/>
       <h1>Budget Calculator</h1>
       <main className="App">
         <ExpenseForm
@@ -75,7 +97,12 @@ function App() {
           handleCharge={handleCharge}
           handleSubmit={handleSubmit}
         />
-        <ExpenseList expenses={expenses} />
+        <ExpenseList 
+          expenses={expenses} 
+          handleDelete={handleDelete} 
+          handleEdit={handleEdit} 
+          clearItems={clearItems} 
+        />
       </main>
       <h1>
         Toplam Harcama:{" "}
